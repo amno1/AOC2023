@@ -1,0 +1,8 @@
+AOC 2023 in Emacs Lisp
+
+Solutions to some of the puzzles from [[https://adventofcode.com/2023][Advent of Code 2023]].
+
+Solution for each day is in the correspoing file names 1.el, 2.el and so on with the input for each day in files named 1, 2 etc.
+
+I use a small helper to automatically download input and generate a file with some skeleton code, which you can get [[https://gist.github.com/amno1/08f4d98b425b44bb342acbfbe183116a][from here]].
+If you are interested to automate input file downloading, look at the aoc-helper.el and read comments about the session cookie.
