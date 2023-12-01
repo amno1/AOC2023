@@ -29,11 +29,10 @@
       (insert-file-contents-literally "/home/arthur/repos/AOC2023/1")
       (cl-labels
           ((match-to-digit (in)
-             (let ((digit
-                    (pcase in
-                      ("one" "1") ("two"   "2") ("three" "3") ("four"  "4") ("five"  "5")
-                      ("six" "6") ("seven" "7") ("eight" "8") ("nine"  "9") (_ in))))
-               (string-to-number digit)))
+             (string-to-number
+              (pcase in
+                ("one" "1") ("two"   "2") ("three" "3") ("four"  "4") ("five"  "5")
+                ("six" "6") ("seven" "7") ("eight" "8") ("nine"  "9") (_ in))))
            (doit (rgx)
              (let ((digits nil) (acc 0))
                (goto-char (point-min))
@@ -41,7 +40,6 @@
                  (cl-incf acc (* 10 (match-to-digit (match-string 0))))
                  (goto-char (line-end-position))
                  (re-search-backward rgx (line-beginning-position))
-                 (push (match-to-digit (match-string 0)) digits)
                  (cl-incf acc (match-to-digit (match-string 0)))
                  (forward-line))
                acc)))
