@@ -24,32 +24,25 @@
 
 (defun aoc-2023-2 ()
   (interactive)
-  (let ((p1 0) (p2 0) n c i)
+  (let ((p1 0) (p2 0))
     (with-temp-buffer
       (insert-file-contents-literally "/home/arthur/repos/AOC2023/2")
-      (goto-char (point-min))
       (while (search-forward "game" nil t)
         (re-search-forward "[0-9]+")
-        (setq i (string-to-number (match-string 0)))
-        (let ((r 0) (g 0) (b 0))
+        (let ((r 0) (g 0) (b 0)
+              (i (string-to-number (match-string 0))))
           (while (re-search-forward "[0-9]+" (line-end-position) t)
-            (setq n (string-to-number (match-string 0)) c (read (current-buffer)))
-            (cond
-             ((> n 14)
-              (setq i 0))
-             ((> n 13)
-              (when (or (equal c 'red) (equal c 'green))
-                (setq i 0)))
-             ((> n 12)
-              (when (equal c 'red)
-                (setq i 0))))
-            (pcase c
-              ('red   (when (> n r) (setq r n)))
-              ('green (when (> n g) (setq g n)))
-              ('blue  (when (> n b) (setq b n)))))
-          (setq n (* r g b)))
-        (cl-incf p1 i)
-        (cl-incf p2 n)))
+            (let ((n (string-to-number (match-string 0)))
+                  (c (read (current-buffer))))
+              (pcase c
+                ('red   (and (> n 12) (setq i 0)))
+                ('green (and (> n 13) (setq i 0)))
+                ('blue  (and (> n 14) (setq i 0))))
+              (pcase c
+                ('red   (and (> n r) (setq r n)))
+                ('green (and (> n g) (setq g n)))
+                ('blue  (and (> n b) (setq b n))))))
+          (setq p1 (+ p1 i) p2 (+ p2 (* r g b))))))
     (message "Part I: %s, Part II: %s" p1 p2)))
 
 ;;; 2.el ends here
