@@ -45,4 +45,31 @@
                acc)))
         (message "Part I: %s, Part II: %s" (doit "[0-9]") (doit wrgx))))))
 
+(setq num-list (mapcar (lambda (e) `(,(int-to-string e) . ,e)) (number-sequence 1 9)))
+(setq spelled-list '(("one" . 1) ("two" . 2) ("three" . 3) ("four" . 4) ("five" . 5) ("six" . 6) ("seven" . 7) ("eight" . 8) ("nine" . 9)))
+
+(defun doit (vextr)
+  (with-temp-buffer
+    (insert-file-contents "1")
+    (let ((res 0))
+      (while (not (eobp))
+        (let* ((l (thing-at-point 'line))
+               (digits (mapcan (lambda (i) (funcall vextr (substring l i))) (number-sequence 0 (length l)))))
+          (setq res (+ res (* (car digits) 10) (car (last digits))))
+          (forward-line 1)))
+      (message "%d" res))))
+
+(defun extr (alist)
+  `(lambda (l) (cond ,@(mapcar (lambda (e) `((string-prefix-p ,(car e) l) (list ,(cdr e)))) alist))))
+
+(doit (extr num-list))
+(doit (extr (append spelled-list num-list)))
+
+(catch 'some-value
+  (while t
+    (if (= (% (random 100) 13) 0)
+        (throw 'some-value "You are lucky!")
+      (message "%s" (if (oddp i) "Unlucky!" "Still unlucky ...")))))
+
+
 ;;; 1.el ends here
